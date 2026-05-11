@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prediksi Stres Mahasiswa - DSS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:opsz@8..48&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+</head>
+<body>
+  <div class="bg-ornament" aria-hidden="true"></div>
+  <div class="container">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">Sistem Pendukung Keputusan</p>
+        <h1>Prediksi Stres Mahasiswa</h1>
+        <p class="subhead">Masukkan data psikologis, gaya hidup, dan akademik untuk mendapatkan prediksi stres yang dapat dijelaskan.</p>
+      </div>
+      <div class="status-pill" aria-live="polite">
+        <span class="dot"></span>
+        Backend: localhost:5000
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="form-section" aria-labelledby="formTitle">
+        <h2 id="formTitle">Form Input Prediksi</h2>
+        <form id="predictionForm" novalidate>
+          <div class="form-group">
+            <h3>Metrik Psikologis</h3>
+            <div class="input-grid">
+              <label class="input-group">
+                <span class="label-text">Skor Stres</span>
+                <span class="value-display" data-for="stress_score">50</span>
+                <input type="range" id="stress_score" name="stress_score" min="0" max="100" value="50" required>
+              </label>
+              <label class="input-group">
+                <span class="label-text">Skor Kecemasan</span>
+                <span class="value-display" data-for="anxiety_score">50</span>
+                <input type="range" id="anxiety_score" name="anxiety_score" min="0" max="100" value="50" required>
+              </label>
+              <label class="input-group">
+                <span class="label-text">Tekanan Ujian</span>
+                <span class="value-display" data-for="exam_pressure">5</span>
+                <input type="range" id="exam_pressure" name="exam_pressure" min="0" max="10" value="5" required>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <h3>Gaya Hidup dan Kesehatan</h3>
+            <div class="input-grid">
+              <label class="input-group">
+                <span class="label-text">Jam Tidur</span>
+                <input type="number" id="sleep_hours" name="sleep_hours" min="0" max="12" step="0.5" value="7" required>
+              </label>
+              <label class="input-group">
+                <span class="label-text">Dukungan Sosial</span>
+                <span class="value-display" data-for="social_support">5</span>
+                <input type="range" id="social_support" name="social_support" min="0" max="10" value="5" required>
+              </label>
+              <label class="input-group">
+                <span class="label-text">Detak Jantung</span>
+                <input type="number" id="heart_rate" name="heart_rate" min="40" max="200" value="80" required>
+              </label>
+              <label class="input-group">
+                <span class="label-text">Aktivitas Fisik</span>
+                <span class="value-display" data-for="physical_activity">5</span>
+                <input type="range" id="physical_activity" name="physical_activity" min="0" max="10" value="5" required>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <h3>Beban Akademik</h3>
+            <div class="input-grid">
+              <label class="input-group">
+                <span class="label-text">Beban Tugas</span>
+                <span class="value-display" data-for="assignment_load">5</span>
+                <input type="range" id="assignment_load" name="assignment_load" min="0" max="10" value="5" required>
+              </label>
+              <label class="input-group">
+                <span class="label-text">Jam Belajar</span>
+                <input type="number" id="study_hours" name="study_hours" min="0" max="12" step="0.5" value="4" required>
+              </label>
+              <label class="input-group">
+                <span class="label-text">Kehadiran</span>
+                <span class="value-display" data-for="attendance">80</span>
+                <input type="range" id="attendance" name="attendance" min="0" max="100" value="80" required>
+              </label>
+              <label class="input-group">
+                <span class="label-text">Waktu Layar</span>
+                <input type="number" id="screen_time" name="screen_time" min="0" max="24" step="0.5" value="6" required>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <h3>Metrik Tambahan</h3>
+            <div class="input-grid">
+              <label class="input-group">
+                <span class="label-text">Ekspresi Wajah</span>
+                <select id="facial_emotion" name="facial_emotion" required>
+                  <option value="Neutral" selected>Neutral</option>
+                  <option value="Happy">Happy</option>
+                  <option value="Sad">Sad</option>
+                  <option value="Angry">Angry</option>
+                  <option value="Surprised">Surprised</option>
+                </select>
+              </label>
+              <label class="input-group">
+                <span class="label-text">Kondisi Mood</span>
+                <select id="mood_state" name="mood_state" required>
+                  <option value="Neutral" selected>Neutral</option>
+                  <option value="Happy">Happy</option>
+                  <option value="Sad">Sad</option>
+                  <option value="Anxious">Anxious</option>
+                  <option value="Excited">Excited</option>
+                </select>
+              </label>
+              <label class="input-group">
+                <span class="label-text">Respons Intervensi</span>
+                <select id="intervention_response" name="intervention_response" required>
+                  <option value="Positive" selected>Positive</option>
+                  <option value="Neutral">Neutral</option>
+                  <option value="Negative">Negative</option>
+                </select>
+              </label>
+              <label class="input-group">
+                <span class="label-text">Skor Reward</span>
+                <span class="value-display" data-for="reward_score">50</span>
+                <input type="range" id="reward_score" name="reward_score" min="0" max="100" value="50" required>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit">Prediksi Tingkat Stres</button>
+        </form>
+      </section>
+
+      <aside class="results-section" id="results" aria-live="polite" hidden>
+        <div class="results-card">
+          <h2>Hasil Prediksi</h2>
+          <div class="badge-row">
+            <div class="badge" id="stressBadge">Stres: --</div>
+            <div class="badge" id="anxietyBadge">Kecemasan: --</div>
+          </div>
+          <div class="result-line">
+            <span>Status Akhir</span>
+            <strong id="finalState">--</strong>
+          </div>
+          <div class="result-highlight">
+            <span>Intervensi Disarankan</span>
+            <strong id="recommendation">--</strong>
+          </div>
+          <div class="confidence">
+            <div class="confidence-header">
+              <span>Tingkat Keyakinan</span>
+              <span id="confidenceValue">0%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar" id="confidenceBar"></div>
+            </div>
+          </div>
+          <p class="explanation" id="explanationText">--</p>
+        </div>
+      </aside>
+    </main>
+
+    <div id="loading" class="loading" hidden>
+      <div class="spinner" role="status" aria-label="Memuat"></div>
+      <span>Menjalankan prediksi...</span>
+    </div>
+
+    <div id="errorMessage" class="error" role="alert" hidden></div>
+  </div>
+</body>
+</html>
