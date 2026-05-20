@@ -6,7 +6,8 @@
       "Bash(python app.py)",
       "Bash(netstat -ano)",
       "Bash(findstr :5000)",
-      "Bash(powershell -Command \"Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait\\('%{TAB}'\\); Start-Sleep -Milliseconds 500\")"
+      "Bash(powershell -Command \"Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait\\('%{TAB}'\\); Start-Sleep -Milliseconds 500\")",
+      "Bash(git push *)"
     ]
   }
 }
