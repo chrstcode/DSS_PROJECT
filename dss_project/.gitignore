@@ -1,0 +1,32 @@
+# Virtualenv
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Temporary and editor files
+*.tmp*
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Archives and bundles
+dss_project.zip
+
+# Claude settings and local IDE
+.dss_project.claude/
+.claude/
+
+# Node / build
+node_modules/
+
+# logs
+*.log
+
+# other
+.vscode/
