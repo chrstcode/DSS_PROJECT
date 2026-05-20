@@ -1,0 +1,23 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="200" fill="none"/>
+
+  <!-- Outer Border (Brutalism) -->
+  <rect x="10" y="10" width="180" height="180" fill="none" stroke="#0f172a" stroke-width="2"/>
+
+  <!-- Abstract Geometric Shape: Ascending stairs/blocks -->
+  <!-- Bottom-left block (Navy) -->
+  <rect x="35" y="130" width="35" height="35" fill="none" stroke="#0f172a" stroke-width="2"/>
+
+  <!-- Middle block (Yellow) - offset up and right -->
+  <rect x="65" y="100" width="35" height="35" fill="#facc15" stroke="#0f172a" stroke-width="2"/>
+
+  <!-- Top-right block (Emerald) - offset up and right -->
+  <rect x="95" y="70" width="35" height="35" fill="#10b981" stroke="#0f172a" stroke-width="2"/>
+
+  <!-- Top-right accent (Navy outline) - floating -->
+  <rect x="130" y="45" width="20" height="20" fill="none" stroke="#0f172a" stroke-width="2"/>
+
+  <!-- Connecting diagonal line (upward arrow suggestion) -->
+  <line x1="50" y1="130" x2="145" y2="45" stroke="#0f172a" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+</svg>

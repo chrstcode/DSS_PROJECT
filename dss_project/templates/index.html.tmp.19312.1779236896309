@@ -3,15 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Student Stress Doctor — sistem pendukung keputusan untuk memprediksi tingkat stres mahasiswa, menampilkan jalur keputusan, dan rekomendasi intervensi yang dapat dijelaskan.">
-  <meta property="og:title" content="Student Stress Doctor - DSS">
-  <meta property="og:description" content="Prediksi stres mahasiswa dengan decision tree yang transparan dan rekomendasi tindakan berbasis bukti.">
-  <meta property="og:image" content="{{ url_for('logo_image') }}">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="{{ url_for('logo_image') }}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('logo_image') }}">
-  <link rel="shortcut icon" href="{{ url_for('logo_image') }}">
-  <link rel="apple-touch-icon" href="{{ url_for('logo_image') }}">
   <title>Student Stress Doctor - DSS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,12 +45,8 @@
 </head>
 <body class="min-h-screen bg-cream font-sans text-ink">
   <div class="mx-auto w-full max-w-6xl px-4 pb-20 pt-10 lg:px-8">
-    <header class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between reveal" reveal data-animate>
+    <header class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between" data-animate>
       <div class="flex items-center gap-3">
-        <a href="/" class="inline-flex items-center gap-3">
-          <img src="{{ url_for('logo_image') }}" alt="Student Stress Doctor" class="h-10 w-auto">
-          <span class="font-display text-lg font-bold text-ink">Student Stress Doctor</span>
-        </a>
         <!-- <div class="flex items-center gap-2 rounded-full border-2 border-ink bg-white px-3 py-1 text-xs font-bold uppercase tracking-widest">
           <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
           Student Stress Doctor
@@ -68,31 +55,30 @@
       </div>
       <nav class="flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-700">
         <a href="#formTitle" class="rounded-full border-2 border-ink bg-white px-3 py-2 transition hover:-translate-y-0.5">Input</a>
+        <a href="#results" class="rounded-full border-2 border-ink bg-white px-3 py-2 transition hover:-translate-y-0.5">Hasil</a>
         <a href="#analysisTitle" class="rounded-full border-2 border-ink bg-white px-3 py-2 transition hover:-translate-y-0.5">Decision Tree</a>
         <a href="#datasetTitle" class="rounded-full border-2 border-ink bg-white px-3 py-2 transition hover:-translate-y-0.5">Dataset</a>
       </nav>
     </header>
 
-    <section class="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] reveal" reveal data-animate>
+    <section class="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]" data-animate>
       <div class="space-y-6">
         <!-- <div class="flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-600">
           <span class="rounded-full border-2 border-ink bg-white px-3 py-1">Decision Support</span>
           <span class="rounded-full border-2 border-ink bg-white px-3 py-1">Real-time Insight</span>
         </div> -->
-        <h1 class="leading-tight space-y-0">
-          <div class="font-display text-5xl sm:text-6xl lg:text-6xl font-black tracking-tight text-ink">
+        <h1 class="leading-none space-y-1">
+          <div class="font-display text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-ink">
             LIHAT TINGKAT STRES
           </div>
-          <div class="font-display text-5xl sm:text-6xl lg:text-6xl font-black tracking-tight">
+          <div class="font-display text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight">
             MAHASISWA ANDA
+            <span class="text-red-600"> TERTEKAN</span>.
           </div>
-          <div class="font-display text-5xl sm:text-6xl lg:text-6xl font-black tracking-tight">
-            <span class="text-red-600">TERTEKAN</span>.
-          </div>
-          <div class="font-display text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight flex items-center gap-3">
-            <span class="text-slate-500">DALAM</span>
-            <span class="inline-flex items-center justify-center px-4 py-2 text-sun font-display text-4xl sm:text-5xl lg:text-6xl font-black">30</span>
-            <span class="text-slate-500">DETIK.</span>
+          <div class="font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
+            <span class="text-slate-400">DALAM</span>
+            <span class="inline-flex items-center justify-center bg-ink px-3 py-1 text-sun font-display text-3xl sm:text-4xl lg:text-5xl min-w-[100px]">30</span>
+            <span class="text-slate-400">DETIK.</span>
           </div>
         </h1>
         <p class="max-w-xl text-base text-slate-700 sm:text-lg">
@@ -106,93 +92,58 @@
             Preview Dataset
           </button>
         </div>
-      </div>
-
-      <div class="space-y-6" style="margin-bottom: 60px;">
-        <!-- diagnose.stream Window -->
-        <div>
-          <div class="rounded-2xl border-4 border-ink bg-white p-6 shadow-lg" style="box-shadow: 12px 12px 0 rgba(0,0,0,0.15);">
-            <div class="flex items-center gap-3 mb-5 pb-4 border-b-2 border-slate-200">
-              <div class="flex gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
-              </div>
-              <span class="text-xs font-bold text-slate-700">diagnose.stream</span>
-            </div>
-
-            <div class="bg-purple-50 rounded-lg p-3 mb-5 border border-purple-200">
-              <p class="text-xs text-slate-600 font-mono">sessionId 8f4a2c · streaming</p>
-            </div>
-            <ol class="space-y-2.5 text-sm">
-              <li class="flex items-center justify-between">
-                <div>
-                  <div class="text-slate-400 font-mono text-xs">01</div>
-                  <div class="text-slate-700 font-medium">capture.input</div>
-                  <div class="text-xs text-slate-500">Mengumpulkan indikator psikologis, akademik, fisik, dan sosial.</div>
-                </div>
-                <span class="text-emerald-600 text-xs font-bold tracking-wider">VERIFIED</span>
-              </li>
-
-              <li class="flex items-center justify-between">
-                <div>
-                  <div class="text-slate-400 font-mono text-xs">02</div>
-                  <div class="text-slate-700 font-medium">compute.infer</div>
-                  <div class="text-xs text-slate-500">Inferensi pohon keputusan yang dapat dijelaskan secara lokal.</div>
-                </div>
-                <span class="text-blue-600 text-xs font-bold tracking-wider">COMPUTED</span>
-              </li>
-
-              <li class="flex items-center justify-between">
-                <div>
-                  <div class="text-slate-400 font-mono text-xs">03</div>
-                  <div class="text-slate-700 font-medium">explain.path</div>
-                  <div class="text-xs text-slate-500">Menyajikan jalur keputusan step-by-step untuk transparansi.</div>
-                </div>
-                <span class="text-amber-600 text-xs font-bold tracking-wider">EXPLAINED</span>
-              </li>
-
-              <li class="flex items-center justify-between">
-                <div>
-                  <div class="text-slate-400 font-mono text-xs">04</div>
-                  <div class="text-slate-700 font-medium">recommend.action</div>
-                  <div class="text-xs text-slate-500">Rekomendasi tindakan yang praktis, bertingkat, dan berbasis bukti.</div>
-                </div>
-                <span class="text-purple-600 text-xs font-bold tracking-wider">SUGGESTED</span>
-              </li>
-
-              <li class="flex items-center justify-between">
-                <div>
-                  <div class="text-slate-400 font-mono text-xs">05</div>
-                  <div class="text-slate-700 font-medium">monitor.response</div>
-                  <div class="text-xs text-slate-500">Memantau respons intervensi untuk iterasi dan perbaikan.</div>
-                </div>
-                <span class="text-blue-600 text-xs font-bold tracking-wider">TRACKED</span>
-              </li>
-            </ol>
-          </div>
-        </div>
         <div class="grid gap-4 sm:grid-cols-3">
-          <div class="rounded-2xl border-2 border-ink bg-white p-4 shadow-brutal-sm card-animate" reveal data-animate>
+          <div class="rounded-2xl border-2 border-ink bg-white p-4 shadow-brutal-sm card-animate" data-animate>
             <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Indikator</p>
             <p class="font-display text-3xl">14</p>
             <p class="text-xs text-slate-600">Input lengkap untuk akurasi.</p>
           </div>
-          <div class="rounded-2xl border-2 border-ink bg-white p-4 shadow-brutal-sm card-animate" reveal data-animate>
+          <div class="rounded-2xl border-2 border-ink bg-white p-4 shadow-brutal-sm card-animate" data-animate>
             <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Target</p>
             <p class="font-display text-3xl">4</p>
             <p class="text-xs text-slate-600">Stress, anxiety, final state, intervensi.</p>
           </div>
-          <div class="rounded-2xl border-2 border-ink bg-white p-4 shadow-brutal-sm card-animate" reveal data-animate>
+          <div class="rounded-2xl border-2 border-ink bg-white p-4 shadow-brutal-sm card-animate" data-animate>
             <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Model</p>
             <p class="font-display text-3xl">Tree</p>
             <p class="text-xs text-slate-600">Transparan & mudah dijelaskan.</p>
           </div>
         </div>
       </div>
+
+      <div class="space-y-4">
+        <div class="rounded-2xl border-2 border-ink bg-white p-5 shadow-brutal card-animate" data-animate>
+          <div class="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-slate-600">
+            <span>diagnose.stream</span>
+            <span class="rounded-full border-2 border-ink bg-emerald-200 px-2 py-0.5 text-emerald-900">live</span>
+          </div>
+          <ol class="mt-4 space-y-2 text-sm font-semibold">
+            <li class="flex items-center justify-between rounded-xl border-2 border-ink bg-slate-50 px-3 py-2">
+              <span>01 score.capture</span>
+              <span class="text-emerald-600">VERIFIED</span>
+            </li>
+            <li class="flex items-center justify-between rounded-xl border-2 border-ink bg-slate-50 px-3 py-2">
+              <span>02 stress.classify</span>
+              <span class="text-blue-600">COMPUTED</span>
+            </li>
+            <li class="flex items-center justify-between rounded-xl border-2 border-ink bg-slate-50 px-3 py-2">
+              <span>03 path.explain</span>
+              <span class="text-amber-600">ESTIMATED</span>
+            </li>
+            <li class="flex items-center justify-between rounded-xl border-2 border-ink bg-slate-50 px-3 py-2">
+              <span>04 action.recommend</span>
+              <span class="text-emerald-600">VERIFIED</span>
+            </li>
+          </ol>
+        </div>
+        <div class="rounded-2xl border-2 border-ink bg-white p-5 shadow-brutal">
+          <p class="text-xs font-bold uppercase tracking-widest text-ink">Backend Status</p>
+          <p class="mt-2 text-base text-ink">Server Flask berjalan di localhost:5000. Sistem siap menerima prediksi.</p>
+        </div>
+      </div>
     </section>
 
-    <main class="mt-12 grid items-start gap-8 lg:grid-cols-[1.1fr_0.9fr]" reveal data-animate>
+    <main class="mt-12 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]" data-animate>
       <section class="rounded-3xl border-2 border-ink bg-white p-6 shadow-brutal card-animate" aria-labelledby="formTitle">
         <div class="space-y-2">
           <h2 id="formTitle" class="font-display text-3xl">Form Konsultasi</h2>
@@ -200,22 +151,7 @@
         </div>
 
         <form id="predictionForm" class="mt-6 space-y-6" novalidate>
-          <div class="rounded-2xl border-2 border-ink bg-white p-4 shadow-brutal-sm card-animate" reveal data-animate>
-            <div class="flex flex-wrap items-center justify-between gap-3 text-xs font-bold uppercase tracking-widest text-slate-600">
-              <span id="stepCounter">Step 1 dari 4</span>
-              <span id="stepTitle">Metrik Psikologis</span>
-            </div>
-            <div class="mt-3 h-3 w-full border-2 border-ink bg-white">
-              <div id="stepProgress" class="h-full w-1/4 bg-sun"></div>
-            </div>
-            <div class="mt-4 grid grid-cols-4 gap-2">
-              <button type="button" class="step-dot is-active rounded-full border-2 border-ink bg-white px-3 py-1 text-xs font-bold" data-step="1">1</button>
-              <button type="button" class="step-dot rounded-full border-2 border-ink bg-white px-3 py-1 text-xs font-bold" data-step="2">2</button>
-              <button type="button" class="step-dot rounded-full border-2 border-ink bg-white px-3 py-1 text-xs font-bold" data-step="3">3</button>
-              <button type="button" class="step-dot rounded-full border-2 border-ink bg-white px-3 py-1 text-xs font-bold" data-step="4">4</button>
-            </div>
-          </div>
-          <div class="step-panel rounded-2xl border-2 border-ink bg-white p-5 card-animate" data-step="1" reveal data-animate>
+          <div class="rounded-2xl border-2 border-ink bg-white p-5 card-animate" data-animate>
             <div class="flex items-center justify-between gap-2">
               <h3 class="font-display text-xl">Metrik Psikologis</h3>
               <span class="text-xs font-bold uppercase tracking-widest text-slate-500">4 indikator</span>
@@ -227,7 +163,7 @@
                   <span>0 - 100</span>
                   <span class="rounded-full border-2 border-ink bg-sun px-3 py-1 font-bold" data-for="stress_score">50</span>
                 </div>
-                <input type="range" id="stress_score" name="stress_score" min="0" max="100" value="50" class="w-full" required>
+                <input type="range" id="stress_score" name="stress_score" min="0" max="100" value="50" class="w-full accent-emerald-600" required>
                 <p class="text-xs text-slate-500">Semakin tinggi skor, semakin besar tekanan.</p>
               </label>
               <label class="space-y-2">
@@ -236,7 +172,7 @@
                   <span>0 - 100</span>
                   <span class="rounded-full border-2 border-ink bg-sun px-3 py-1 font-bold" data-for="anxiety_score">50</span>
                 </div>
-                <input type="range" id="anxiety_score" name="anxiety_score" min="0" max="100" value="50" class="w-full" required>
+                <input type="range" id="anxiety_score" name="anxiety_score" min="0" max="100" value="50" class="w-full accent-emerald-600" required>
                 <p class="text-xs text-slate-500">Menggambarkan kecemasan harian.</p>
               </label>
               <label class="space-y-2">
@@ -245,31 +181,24 @@
                   <span>0 - 100</span>
                   <span class="rounded-full border-2 border-ink bg-sun px-3 py-1 font-bold" data-for="reward_score">50</span>
                 </div>
-                <input type="range" id="reward_score" name="reward_score" min="0" max="100" value="50" class="w-full" required>
+                <input type="range" id="reward_score" name="reward_score" min="0" max="100" value="50" class="w-full accent-emerald-600" required>
                 <p class="text-xs text-slate-500">Seberapa besar reward yang dirasakan.</p>
               </label>
               <label class="space-y-2">
                 <span class="text-sm font-semibold">Kondisi Mood</span>
-                <div class="dropdown" data-name="mood_state" data-value="Neutral">
-                  <input type="hidden" id="mood_state" name="mood_state" value="Neutral">
-                  <button type="button" class="dropdown-trigger">
-                    <span class="dropdown-label">Netral</span>
-                    <span class="dropdown-caret" aria-hidden="true">▾</span>
-                  </button>
-                  <ul class="dropdown-menu" role="listbox">
-                    <li><button type="button" class="dropdown-option is-selected" data-value="Neutral">Netral</button></li>
-                    <li><button type="button" class="dropdown-option" data-value="Happy">Senang</button></li>
-                    <li><button type="button" class="dropdown-option" data-value="Sad">Sedih</button></li>
-                    <li><button type="button" class="dropdown-option" data-value="Anxious">Cemas</button></li>
-                    <li><button type="button" class="dropdown-option" data-value="Excited">Bersemangat</button></li>
-                  </ul>
-                </div>
+                <select id="mood_state" name="mood_state" class="w-full rounded-xl border-2 border-ink bg-white px-3 py-2 text-sm" required>
+                  <option value="Neutral" selected>Netral</option>
+                  <option value="Happy">Senang</option>
+                  <option value="Sad">Sedih</option>
+                  <option value="Anxious">Cemas</option>
+                  <option value="Excited">Bersemangat</option>
+                </select>
                 <p class="text-xs text-slate-500">Pilih mood dominan saat ini.</p>
               </label>
             </div>
           </div>
 
-          <div class="step-panel hidden rounded-2xl border-2 border-ink bg-white p-5 card-animate" data-step="2" reveal data-animate>
+          <div class="rounded-2xl border-2 border-ink bg-white p-5 card-animate" data-animate>
             <div class="flex items-center justify-between gap-2">
               <h3 class="font-display text-xl">Indikator Akademik</h3>
               <span class="text-xs font-bold uppercase tracking-widest text-slate-500">4 indikator</span>
@@ -296,13 +225,13 @@
                   <span>0 - 100</span>
                   <span class="rounded-full border-2 border-ink bg-sun px-3 py-1 font-bold" data-for="attendance">80</span>
                 </div>
-                <input type="range" id="attendance" name="attendance" min="0" max="100" value="80" class="w-full" required>
+                <input type="range" id="attendance" name="attendance" min="0" max="100" value="80" class="w-full accent-emerald-600" required>
                 <p class="text-xs text-slate-500">Persentase kehadiran kuliah.</p>
               </label>
             </div>
           </div>
 
-          <div class="step-panel hidden rounded-2xl border-2 border-ink bg-white p-5 card-animate" data-step="3" reveal data-animate>
+          <div class="rounded-2xl border-2 border-ink bg-white p-5 card-animate" data-animate>
             <div class="flex items-center justify-between gap-2">
               <h3 class="font-display text-xl">Kesehatan Fisik</h3>
               <span class="text-xs font-bold uppercase tracking-widest text-slate-500">4 indikator</span>
@@ -331,7 +260,7 @@
             </div>
           </div>
 
-          <div class="step-panel hidden rounded-2xl border-2 border-ink bg-white p-5 card-animate" data-step="4" reveal data-animate>
+          <div class="rounded-2xl border-2 border-ink bg-white p-5 card-animate" data-animate>
             <div class="flex items-center justify-between gap-2">
               <h3 class="font-display text-xl">Sosial & Perilaku</h3>
               <span class="text-xs font-bold uppercase tracking-widest text-slate-500">3 indikator</span>
@@ -344,56 +273,34 @@
               </label>
               <label class="space-y-2">
                 <span class="text-sm font-semibold">Ekspresi Wajah</span>
-                <div class="dropdown" data-name="facial_emotion" data-value="Neutral">
-                  <input type="hidden" id="facial_emotion" name="facial_emotion" value="Neutral">
-                  <button type="button" class="dropdown-trigger">
-                    <span class="dropdown-label">Netral</span>
-                    <span class="dropdown-caret" aria-hidden="true">▾</span>
-                  </button>
-                  <ul class="dropdown-menu" role="listbox">
-                    <li><button type="button" class="dropdown-option is-selected" data-value="Neutral">Netral</button></li>
-                    <li><button type="button" class="dropdown-option" data-value="Happy">Senang</button></li>
-                    <li><button type="button" class="dropdown-option" data-value="Sad">Sedih</button></li>
-                    <li><button type="button" class="dropdown-option" data-value="Angry">Marah</button></li>
-                    <li><button type="button" class="dropdown-option" data-value="Surprised">Terkejut</button></li>
-                  </ul>
-                </div>
+                <select id="facial_emotion" name="facial_emotion" class="w-full rounded-xl border-2 border-ink bg-white px-3 py-2 text-sm" required>
+                  <option value="Neutral" selected>Netral</option>
+                  <option value="Happy">Senang</option>
+                  <option value="Sad">Sedih</option>
+                  <option value="Angry">Marah</option>
+                  <option value="Surprised">Terkejut</option>
+                </select>
                 <p class="text-xs text-slate-500">Ekspresi dominan saat ini.</p>
               </label>
               <label class="space-y-2">
                 <span class="text-sm font-semibold">Respons Intervensi</span>
-                <div class="dropdown" data-name="intervention_response" data-value="Positive">
-                  <input type="hidden" id="intervention_response" name="intervention_response" value="Positive">
-                  <button type="button" class="dropdown-trigger">
-                    <span class="dropdown-label">Positif</span>
-                    <span class="dropdown-caret" aria-hidden="true">▾</span>
-                  </button>
-                  <ul class="dropdown-menu" role="listbox">
-                    <li><button type="button" class="dropdown-option is-selected" data-value="Positive">Positif</button></li>
-                    <li><button type="button" class="dropdown-option" data-value="Neutral">Netral</button></li>
-                    <li><button type="button" class="dropdown-option" data-value="Negative">Negatif</button></li>
-                  </ul>
-                </div>
+                <select id="intervention_response" name="intervention_response" class="w-full rounded-xl border-2 border-ink bg-white px-3 py-2 text-sm" required>
+                  <option value="Positive" selected>Positif</option>
+                  <option value="Neutral">Netral</option>
+                  <option value="Negative">Negatif</option>
+                </select>
                 <p class="text-xs text-slate-500">Respons terhadap intervensi sebelumnya.</p>
               </label>
             </div>
           </div>
 
-          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
             <button type="button" id="clearForm" class="rounded-full border-2 border-ink bg-white px-6 py-3 text-xs font-bold uppercase tracking-widest shadow-brutal-sm transition hover:-translate-y-0.5">
               Bersihkan Form
             </button>
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <button type="button" id="prevStep" class="hidden rounded-full border-2 border-ink bg-white px-6 py-3 text-xs font-bold uppercase tracking-widest shadow-brutal-sm transition hover:-translate-y-0.5">
-                Kembali
-              </button>
-              <button type="button" id="nextStep" class="rounded-full border-2 border-ink bg-sun px-6 py-3 text-xs font-bold uppercase tracking-widest shadow-brutal transition hover:-translate-y-0.5">
-                Lanjut
-              </button>
-              <button type="submit" id="predictButton" class="hidden rounded-full border-2 border-ink bg-sun px-6 py-3 text-xs font-bold uppercase tracking-widest text-ink shadow-brutal transition hover:-translate-y-0.5">
-                Prediksi Tingkat Stres
-              </button>
-            </div>
+            <button type="submit" id="predictButton" class="flex-1 rounded-full border-2 border-ink bg-ink px-6 py-3 text-xs font-bold uppercase tracking-widest text-ink shadow-brutal transition hover:-translate-y-0.5">
+              Prediksi Tingkat Stres
+            </button>
           </div>
         </form>
 
@@ -405,7 +312,7 @@
         <div id="errorMessage" class="mt-4 rounded-xl border-2 border-red-500 bg-red-50 p-3 text-sm text-red-700" role="alert" hidden></div>
       </section>
 
-      <aside class="space-y-6" reveal data-animate>
+      <aside class="space-y-6" data-animate>
         <div id="results" class="rounded-3xl border-2 border-ink bg-white p-6 shadow-brutal card-animate" aria-live="polite" hidden>
           <div class="space-y-4">
             <div>
@@ -454,7 +361,7 @@
           </div>
         </div>
 
-        <div id="quickGuide" class="rounded-3xl border-2 border-ink bg-white p-6 shadow-brutal card-animate" reveal data-animate>
+        <div class="rounded-3xl border-2 border-ink bg-white p-6 shadow-brutal card-animate" data-animate>
           <h3 class="font-display text-2xl text-ink">Panduan Cepat</h3>
           <ul class="mt-3 space-y-2 text-sm text-ink">
             <li>Isi data sesuai kondisi terbaru kamu.</li>
@@ -465,7 +372,7 @@
       </aside>
     </main>
 
-    <section class="mt-14 rounded-3xl border-2 border-ink bg-white p-6 shadow-brutal section-animate" aria-labelledby="analysisTitle" reveal data-animate>
+    <section class="mt-14 rounded-3xl border-2 border-ink bg-white p-6 shadow-brutal section-animate" aria-labelledby="analysisTitle" data-animate>
       <div class="space-y-6">
         <div class="flex flex-col gap-4">
           <div>
@@ -539,7 +446,7 @@
       </div>
     </section>
 
-    <section class="mt-14 rounded-3xl border-2 border-ink bg-white p-6 shadow-brutal section-animate" aria-labelledby="datasetTitle" reveal data-animate>
+    <section class="mt-14 rounded-3xl border-2 border-ink bg-white p-6 shadow-brutal section-animate" aria-labelledby="datasetTitle" data-animate>
       <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Dataset</p>
@@ -568,7 +475,7 @@
       </div>
       <div class="flex-1 overflow-y-auto hide-scrollbar p-6">
         <p class="text-sm text-slate-600 mb-4" id="datasetModalSummary">Memuat preview dataset...</p>
-        <div class="overflow-x-auto rounded-2xl border-2 border-ink max-h-[55vh] overflow-y-auto">
+        <div class="overflow-x-auto rounded-2xl border-2 border-ink">
           <table class="min-w-full text-left text-sm" id="datasetTable">
             <thead class="bg-slate-100 text-xs font-bold uppercase tracking-widest text-slate-500">
               <tr></tr>

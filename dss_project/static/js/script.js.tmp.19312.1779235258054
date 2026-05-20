@@ -36,16 +36,6 @@ const PATH_EMPTY_TEXT = "Klik prediksi untuk melihat jalur keputusan.";
 const KEY_FACTOR_EMPTY = "Faktor utama akan muncul setelah prediksi.";
 const RECOMMENDATION_EMPTY = "Rekomendasi akan muncul setelah prediksi.";
 
-const STEP_INFO = [
-  { step: 1, name: "Metrik Psikologis" },
-  { step: 2, name: "Indikator Akademik" },
-  { step: 3, name: "Kesehatan Fisik" },
-  { step: 4, name: "Sosial & Perilaku" },
-];
-
-let currentStep = 1;
-let formElement = null;
-
 const LEVEL_CLASSES = {
   low: ["bg-emerald-200", "text-emerald-900"],
   medium: ["bg-amber-200", "text-amber-900"],
@@ -125,218 +115,6 @@ function validateInputs(payload) {
   return "";
 }
 
-function clearError() {
-  const errorMessage = document.getElementById("errorMessage");
-  if (errorMessage) {
-    errorMessage.hidden = true;
-  }
-}
-
-function validateStepPanel(panel) {
-  if (!panel || !formElement) {
-    return true;
-  }
-
-  const payload = getFormData(formElement);
-  const fields = panel.querySelectorAll("input[name], select[name]");
-
-  for (const field of fields) {
-    const name = field.name;
-    const rules = validationRules[name];
-    if (!rules) {
-      continue;
-    }
-
-    const focusTarget =
-      field.type === "hidden"
-        ? field.closest(".dropdown")?.querySelector(".dropdown-trigger")
-        : field;
-
-    const value = payload[name];
-    if (value === undefined || value === null || value === "") {
-      showError(`Kolom ${name} wajib diisi.`);
-      focusTarget?.focus();
-      return false;
-    }
-
-    if (rules.type === "select") {
-      if (!rules.options.includes(value)) {
-        showError(`Nilai untuk ${name} tidak valid.`);
-        focusTarget?.focus();
-        return false;
-      }
-      continue;
-    }
-
-    if (Number.isNaN(value)) {
-      showError(`Kolom ${name} harus berupa angka.`);
-      focusTarget?.focus();
-      return false;
-    }
-
-    if (value < rules.min || value > rules.max) {
-      showError(`Kolom ${name} harus di antara ${rules.min} dan ${rules.max}.`);
-      focusTarget?.focus();
-      return false;
-    }
-  }
-
-  return true;
-}
-
-function setupDropdowns() {
-  const dropdowns = document.querySelectorAll(".dropdown");
-  if (!dropdowns.length) {
-    return;
-  }
-
-  const closeAll = (except) => {
-    dropdowns.forEach((dropdown) => {
-      if (dropdown !== except) {
-        dropdown.classList.remove("is-open");
-      }
-    });
-  };
-
-  dropdowns.forEach((dropdown) => {
-    const trigger = dropdown.querySelector(".dropdown-trigger");
-    const label = dropdown.querySelector(".dropdown-label");
-    const options = dropdown.querySelectorAll(".dropdown-option");
-    const hiddenInput = dropdown.querySelector("input[type='hidden']");
-
-    if (!trigger || !label || !hiddenInput || !options.length) {
-      return;
-    }
-
-    const setValue = (value, text) => {
-      hiddenInput.value = value;
-      dropdown.dataset.value = value;
-      label.textContent = text;
-      options.forEach((option) => {
-        option.classList.toggle("is-selected", option.dataset.value === value);
-      });
-    };
-
-    const initialValue = hiddenInput.value || dropdown.dataset.value;
-    const initialOption = Array.from(options).find(
-      (option) => option.dataset.value === initialValue
-    );
-    if (initialOption) {
-      setValue(initialOption.dataset.value, initialOption.textContent);
-    }
-
-    trigger.addEventListener("click", (event) => {
-      event.stopPropagation();
-      const willOpen = !dropdown.classList.contains("is-open");
-      closeAll(dropdown);
-      dropdown.classList.toggle("is-open", willOpen);
-    });
-
-    options.forEach((option) => {
-      option.addEventListener("click", (event) => {
-        event.preventDefault();
-        setValue(option.dataset.value, option.textContent);
-        dropdown.classList.remove("is-open");
-      });
-    });
-  });
-
-  document.addEventListener("click", () => closeAll());
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      closeAll();
-    }
-  });
-}
-
-function validateCurrentStep() {
-  const panel = document.querySelector(
-    `.step-panel[data-step="${currentStep}"]`
-  );
-  return validateStepPanel(panel);
-}
-
-function setActiveStep(step) {
-  const totalSteps = STEP_INFO.length;
-  const nextStep = Math.min(Math.max(step, 1), totalSteps);
-  currentStep = nextStep;
-
-  const panels = document.querySelectorAll(".step-panel");
-  panels.forEach((panel) => {
-    const isActive = Number(panel.dataset.step) === currentStep;
-    panel.classList.toggle("hidden", !isActive);
-  });
-
-  const dots = document.querySelectorAll(".step-dot");
-  dots.forEach((dot) => {
-    const dotStep = Number(dot.dataset.step);
-    dot.classList.toggle("is-active", dotStep === currentStep);
-    dot.classList.toggle("is-complete", dotStep < currentStep);
-  });
-
-  const stepCounter = document.getElementById("stepCounter");
-  const stepTitle = document.getElementById("stepTitle");
-  const stepProgress = document.getElementById("stepProgress");
-  if (stepCounter) {
-    stepCounter.textContent = `Step ${currentStep} dari ${totalSteps}`;
-  }
-  if (stepTitle) {
-    stepTitle.textContent = STEP_INFO[currentStep - 1]?.name || "";
-  }
-  if (stepProgress) {
-    stepProgress.style.width = `${(currentStep / totalSteps) * 100}%`;
-  }
-
-  const prevButton = document.getElementById("prevStep");
-  const nextButton = document.getElementById("nextStep");
-  const predictButton = document.getElementById("predictButton");
-  if (prevButton) {
-    prevButton.classList.toggle("hidden", currentStep === 1);
-  }
-  if (nextButton) {
-    nextButton.classList.toggle("hidden", currentStep === totalSteps);
-  }
-  if (predictButton) {
-    predictButton.classList.toggle("hidden", currentStep !== totalSteps);
-  }
-}
-
-function setupStepper() {
-  const prevButton = document.getElementById("prevStep");
-  const nextButton = document.getElementById("nextStep");
-  const dots = document.querySelectorAll(".step-dot");
-
-  if (prevButton) {
-    prevButton.addEventListener("click", () => {
-      clearError();
-      setActiveStep(currentStep - 1);
-    });
-  }
-
-  if (nextButton) {
-    nextButton.addEventListener("click", () => {
-      if (!validateCurrentStep()) {
-        return;
-      }
-      clearError();
-      setActiveStep(currentStep + 1);
-    });
-  }
-
-  dots.forEach((dot) => {
-    dot.addEventListener("click", () => {
-      const target = Number(dot.dataset.step);
-      if (target > currentStep && !validateCurrentStep()) {
-        return;
-      }
-      clearError();
-      setActiveStep(target);
-    });
-  });
-
-  setActiveStep(currentStep);
-}
-
 async function submitPrediction(event) {
   event.preventDefault();
 
@@ -344,19 +122,8 @@ async function submitPrediction(event) {
   const results = document.getElementById("results");
   const errorMessage = document.getElementById("errorMessage");
 
-  if (errorMessage) {
-    errorMessage.hidden = true;
-  }
+  errorMessage.hidden = true;
   results.hidden = true;
-
-  if (currentStep !== STEP_INFO.length) {
-    if (!validateCurrentStep()) {
-      return;
-    }
-    clearError();
-    setActiveStep(currentStep + 1);
-    return;
-  }
 
   const payload = getFormData(form);
   const validationError = validateInputs(payload);
@@ -397,7 +164,6 @@ async function submitPrediction(event) {
 
 function displayResults(data) {
   const results = document.getElementById("results");
-  const quickGuide = document.getElementById("quickGuide");
   const predictions = data.predictions || {};
 
   const stressBadge = document.getElementById("stressBadge");
@@ -424,20 +190,7 @@ function displayResults(data) {
   applyLevelStyles(anxietyBadge, anxietyLabel);
 
   finalState.textContent = predictions.final_state || "-";
-
-  // If model didn't return a single-line recommended_intervention, fallback to actionable summary
-  let recommText = predictions.recommended_intervention;
-  if (!recommText || String(recommText).trim() === "") {
-    const normalized = String(stressLabel || "").toLowerCase();
-    const items = ACTION_RECOMMENDATIONS[normalized];
-    if (items && items.length) {
-      // use first recommendation as concise summary
-      recommText = items[0];
-    } else {
-      recommText = "-";
-    }
-  }
-  recommendation.textContent = recommText;
+  recommendation.textContent = predictions.recommended_intervention || "-";
 
   const confidencePercent = Math.round((data.confidence || 0) * 100);
   confidenceValue.textContent = `${confidencePercent}%`;
@@ -449,15 +202,7 @@ function displayResults(data) {
   renderKeyFactors(data.decision_paths || {});
   renderRecommendations(stressLabel);
 
-  // hide quick guide when results are shown
-  if (quickGuide) quickGuide.hidden = true;
   results.hidden = false;
-  // focus the intervention tree tab so user sees related decision tree
-  try {
-    setActiveTree('recommended_intervention');
-  } catch (e) {}
-  // reload tree visuals in case they need re-rendering
-  try { loadTrees(); } catch (e) {}
 }
 
 function computeLevelLabel(level, score) {
@@ -498,8 +243,7 @@ function renderDecisionPaths(paths) {
       const item = document.createElement("li");
       item.textContent = PATH_EMPTY_TEXT;
       item.className = "text-sm text-slate-500";
-        list.appendChild(item);
-        try { applyRevealToElement(item); } catch (e) {}
+      list.appendChild(item);
       return;
     }
 
@@ -508,8 +252,7 @@ function renderDecisionPaths(paths) {
       item.textContent = step;
       item.className =
         "rounded-xl border-2 border-ink bg-white px-3 py-2 text-sm text-slate-700";
-        list.appendChild(item);
-        try { applyRevealToElement(item); } catch (e) {}
+      list.appendChild(item);
     });
   });
 }
@@ -528,8 +271,7 @@ function renderKeyFactors(paths) {
     const item = document.createElement("li");
     item.textContent = KEY_FACTOR_EMPTY;
     item.className = "text-sm text-slate-500";
-      list.appendChild(item);
-      try { applyRevealToElement(item); } catch (e) {}
+    list.appendChild(item);
     return;
   }
 
@@ -538,8 +280,7 @@ function renderKeyFactors(paths) {
     item.textContent = step;
     item.className =
       "rounded-xl border-2 border-ink bg-white px-3 py-2 text-sm text-slate-700";
-      list.appendChild(item);
-      try { applyRevealToElement(item); } catch (e) {}
+    list.appendChild(item);
   });
 }
 
@@ -557,8 +298,7 @@ function renderRecommendations(level) {
     const item = document.createElement("li");
     item.textContent = RECOMMENDATION_EMPTY;
     item.className = "text-sm text-slate-500";
-      list.appendChild(item);
-      try { applyRevealToElement(item); } catch (e) {}
+    list.appendChild(item);
     return;
   }
 
@@ -567,8 +307,7 @@ function renderRecommendations(level) {
     item.textContent = text;
     item.className =
       "rounded-xl border-2 border-ink bg-amber-100 px-3 py-2 text-sm text-slate-900";
-      list.appendChild(item);
-      try { applyRevealToElement(item); } catch (e) {}
+    list.appendChild(item);
   });
 }
 
@@ -609,135 +348,77 @@ function renderTreeGraph(target, dot) {
     return;
   }
 
-  if (!dot || typeof dot !== 'string') {
-    setTreeStatus(target, "Tidak ada data");
-    container.innerHTML = `
-      <div class="p-6 text-sm text-slate-600">
-        <p>Pohon keputusan untuk target ini belum tersedia.</p>
-        <p class="mt-3">Jika Anda baru saja memperbarui model, klik tombol di bawah untuk memuat ulang pohon.</p>
-        <div class="mt-4">
-          <button class="rounded-full border-2 border-ink bg-white px-4 py-2 text-xs font-bold shadow-brutal-sm" data-reload-tree>Muati Ulang Pohon</button>
-        </div>
-      </div>`;
-    const btn = container.querySelector('[data-reload-tree]');
-    if (btn) {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        setTreeStatus(target, 'Memuat...');
-        loadTrees();
-      });
+  // Parse DOT format atau gunakan simple tree structure
+  function parseDecisionPaths(paths) {
+    if (!paths || paths.length === 0) {
+      return [{
+        label: "Tree belum dimuat",
+        children: []
+      }];
     }
-    return;
-  }
 
-  function parseDOT(dotString) {
-    const nodes = {};
-    const edges = [];
+    // Convert decision paths menjadi tree structure
+    const tree = [{
+      label: "Root",
+      children: []
+    }];
 
-    // Extract nodes dengan label
-    const nodeRegex = /(\w+)\s*\[\s*label="([^"]+)"[^\]]*\]/g;
-    let match;
+    let currentLevel = tree[0].children;
 
-    while ((match = nodeRegex.exec(dotString)) !== null) {
-      nodes[match[1]] = {
-        id: match[1],
-        label: match[2]
+    paths.forEach((path, idx) => {
+      const node = {
+        label: path,
+        children: []
       };
-    }
-
-    // Extract edges
-    const edgeRegex = /(\w+)\s*->\s*(\w+)/g;
-    while ((match = edgeRegex.exec(dotString)) !== null) {
-      edges.push({
-        from: match[1],
-        to: match[2]
-      });
-    }
-
-    return { nodes, edges };
-  }
-
-  function organizeTreeColumns(nodes, edges) {
-    if (Object.keys(nodes).length === 0) {
-      return { "Tree": Object.values(nodes).map(n => n.label) };
-    }
-
-    // Find root (node with no incoming edges)
-    const incomingEdges = new Set();
-    edges.forEach(e => incomingEdges.add(e.to));
-
-    const rootId = Object.keys(nodes).find(id => !incomingEdges.has(id));
-
-    // BFS to assign levels
-    const levels = {};
-    const visited = new Set();
-    const queue = [[rootId, 0]];
-
-    while (queue.length > 0) {
-      const [nodeId, level] = queue.shift();
-
-      if (visited.has(nodeId)) continue;
-      visited.add(nodeId);
-
-      if (!levels[level]) levels[level] = [];
-      levels[level].push(nodes[nodeId].label);
-
-      // Add children
-      edges
-        .filter(e => e.from === nodeId)
-        .forEach(e => {
-          if (!visited.has(e.to)) {
-            queue.push([e.to, level + 1]);
-          }
-        });
-    }
-
-    // Convert to column format
-    const columns = {};
-    const levelKeys = Object.keys(levels).sort((a, b) => parseInt(a) - parseInt(b));
-
-    levelKeys.forEach((levelIdx, colIdx) => {
-      const colName = `Column ${colIdx + 1}`;
-      columns[colName] = levels[levelIdx];
+      currentLevel.push(node);
     });
 
-    return columns;
+    return tree;
   }
 
-  function renderTreeGrid(columns) {
-    let html = '';
-
-    for (const [columnTitle, items] of Object.entries(columns)) {
-      html += `<div class="tree-column">`;
-      html += `<div class="tree-column-title">${columnTitle}</div>`;
-
-      items.forEach((item) => {
-        // escape HTML then convert both escaped "\\n" and real newlines into <br>
-        let escaped = String(item)
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;");
-        const withBreaks = escaped.replace(/\\\\n/g, "<br>").replace(/\n/g, "<br>");
-        html += `<div class="tree-item"><div class="tree-item-content">${withBreaks}</div></div>`;
-      });
-
-      html += `</div>`;
-    }
-
-    return html;
+  function renderTreeList(data) {
+    return data.map(item => {
+      if (item.children && item.children.length > 0) {
+        return `
+          <details open>
+            <summary><strong>${item.label}</strong></summary>
+            <div class="tree-children">
+              ${renderTreeList(item.children)}
+            </div>
+          </details>
+        `;
+      } else {
+        return `<div class="tree-leaf">→ ${item.label}</div>`;
+      }
+    }).join("");
   }
 
   try {
-    const { nodes, edges } = parseDOT(dot);
-    const columns = organizeTreeColumns(nodes, edges);
-    const html = renderTreeGrid(columns);
+    // Try to parse DOT if available, otherwise create default
+    let treeData;
 
-    container.classList.add("tree-grid");
-    container.innerHTML = html;
+    if (dot && typeof dot === 'string' && dot.includes('digraph')) {
+      // Simple DOT parsing - extract nodes
+      const nodeMatches = dot.match(/[a-zA-Z0-9_]+ \[label="([^"]+)"/g) || [];
+      if (nodeMatches.length > 0) {
+        const labels = nodeMatches.map(m => m.match(/label="([^"]+)"/)[1]);
+        treeData = labels.map(label => ({
+          label: label,
+          children: []
+        }));
+      } else {
+        treeData = parseDecisionPaths([]);
+      }
+    } else {
+      treeData = parseDecisionPaths([]);
+    }
+
+    container.classList.add("tree-list");
+    container.innerHTML = renderTreeList(treeData);
     setTreeStatus(target, "Siap");
   } catch (error) {
     console.error("Tree render error:", error);
-    container.innerHTML = '<div class="text-slate-500">Gagal merender tree</div>';
+    container.textContent = "Gagal merender tree.";
     setTreeStatus(target, "Gagal");
   }
 }
@@ -797,8 +478,7 @@ function renderDatasetTable(columns, rows) {
         "whitespace-nowrap border-b border-slate-200 px-3 py-2 text-sm text-slate-700";
       tr.appendChild(td);
     });
-      body.appendChild(tr);
-      try { applyRevealToElement(tr, index); } catch (e) {}
+    body.appendChild(tr);
   });
 }
 
@@ -928,8 +608,6 @@ function setupClearButton(form) {
   clearButton.addEventListener("click", () => {
     form.reset();
     lastPayload = null;
-    setActiveStep(1);
-    clearError();
 
     document.querySelectorAll("input[type='range']").forEach((slider) => {
       updateSliderValue(slider);
@@ -946,105 +624,12 @@ function setupClearButton(form) {
     if (errorMessage) {
       errorMessage.hidden = true;
     }
-    // show quick guide again when form is cleared
-    try {
-      const quickGuide = document.getElementById("quickGuide");
-      if (quickGuide) quickGuide.hidden = false;
-    } catch (e) {}
   });
-}
-
-// Global reveal observer and helpers so dynamic elements can be observed
-window._revealObserver = null;
-window._revealPrefersReducedMotion = false;
-
-function applyRevealToElement(item, idx) {
-  if (!item) return;
-  const idxVal = typeof idx === "number" ? idx : 0;
-  const delayClass = `reveal-delay-${(idxVal % 4) + 1}`;
-  item.classList.add("reveal", delayClass);
-
-  if (window._revealPrefersReducedMotion || !window._revealObserver) {
-    item.classList.add("is-visible");
-    return;
-  }
-
-  try {
-    window._revealObserver.observe(item);
-  } catch (e) {
-    item.classList.add("is-visible");
-      // apply reveal to tree items created via innerHTML
-      const treeItems = container.querySelectorAll('.tree-item');
-      treeItems.forEach((el, idx) => { try { applyRevealToElement(el, idx); } catch (e) {} });
-  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("predictionForm");
   const sliders = document.querySelectorAll("input[type='range']");
-
-  formElement = form;
-
-  // ===== REVEAL ANIMATIONS (Reference style) =====
-  const revealItems = document.querySelectorAll(
-    ".reveal, .card-animate, .section-animate"
-  );
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  window._revealPrefersReducedMotion = prefersReducedMotion;
-
-  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
-    revealItems.forEach((item) => item.classList.add("is-visible"));
-  } else {
-    revealItems.forEach((item, idx) => {
-      const delayClass = `reveal-delay-${(idx % 4) + 1}`;
-      item.classList.add(delayClass);
-    });
-
-    window._revealObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            try {
-              window._revealObserver.unobserve(entry.target);
-            } catch (e) {}
-          }
-        });
-      },
-      {
-        threshold: 0.2,
-        rootMargin: "0px 0px -10% 0px",
-      }
-    );
-
-    revealItems.forEach((item) => window._revealObserver.observe(item));
-  }
-
-  // Auto-apply reveal classes to common site containers that may have been missed
-  try {
-    const autoSelectors = [
-      "header",
-      "main",
-      "section",
-      ".rounded-2xl",
-      ".rounded-3xl",
-      ".tree-card",
-      ".tree-column",
-      ".dropdown",
-      ".step-panel",
-      ".card-animate",
-      ".section-animate",
-    ];
-
-    const nodes = document.querySelectorAll(autoSelectors.join(","));
-    nodes.forEach((n, idx) => {
-      if (!n.classList.contains("reveal") && !n.classList.contains("is-visible")) {
-        applyRevealToElement(n, idx);
-      }
-    });
-  } catch (e) {
-    // noop
-  }
 
   sliders.forEach((slider) => {
     updateSliderValue(slider);
@@ -1063,6 +648,4 @@ document.addEventListener("DOMContentLoaded", () => {
   setupTreeTabs();
   setupDatasetModal();
   setupClearButton(form);
-  setupStepper();
-  setupDropdowns();
 });
